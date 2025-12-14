@@ -6,7 +6,7 @@ Uses python 3.11, no other packages required
 
 ### -- Day 1: Secret Entrance ---
 
-Tw way dial, count passing zero. Tricky corner cases in part B for a day 1 puzzle.
+Two way dial, count passing zero. Tricky corner cases in part B for a day 1 puzzle.
 Zero to zero not in example and could easily put people in the horrible place of example passes, but my data fails
 
 ### --- Day 2: Gift Shop ---
