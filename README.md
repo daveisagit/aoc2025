@@ -53,7 +53,7 @@ b) Reduce equations using row echelon form to form a narrower set of possibiliti
 
 ### --- Day 11: Reactor ---
 
-DAG: a) total paths b) Refine recursion to accumulate and with and without totals
+DAG: a) total paths b) Refine recursion to accumulate 2 total types (has those nodes / does not)
 
 ### --- Day 12: Christmas Tree Farm ---
 
