@@ -32,7 +32,7 @@ Fiddly parsing problem, values written vertically, read from the right
 
 ### --- Day 7: Laboratories ---
 
-Process each row to know where beams are and how many splitters are hit
+Process each row to know where beams are and how many splitters are hit.
 Nice double recursion in part B using memoise
 
 ### --- Day 8: Playground ---
@@ -42,7 +42,7 @@ Union-find approach merge circuits as connections are added
 ### --- Day 9: Movie Theater ---
 
 Find the largest rectangle within the boundary.
-Since the corners would always be on the boundary there were no corner cases (ha ha)
+Since the corners would always be on the boundary there were no corner cases (ha ha).
 Just test for overlapping boundary excluding the limits
 
 ### --- Day 10: Factory ---
