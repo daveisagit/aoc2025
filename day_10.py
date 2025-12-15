@@ -231,11 +231,11 @@ def get_reduced_ref(btns, js):
 
             # the result of the above loop adjusts the whole row
             # keeping the equation balanced and in keeping with the
-            # system, but means we have effectively eliminated
-            # all variables from it except for the pivot
+            # system, and means we have effectively eliminated
+            # all variables to the left of the pivot
 
             # having leading zeros in the future rows means
-            # we not upset our previous manipulations in prior
+            # we not upset our previous manipulations for prior
             # column when we come to future adjustments
 
         row_idx += 1
@@ -289,7 +289,7 @@ def check_ref_is_reduced(data):
     # make sure we left with just a diagonal in a square matrix
     for i, r in enumerate(squ_m):
         assert len(r) == len(squ_m)  # rows=columns (for every row)
-        assert r[i] != 0  # diagonal is not zero
+        assert r[i] == 1  # diagonal = 1
         nd = [c for j, c in enumerate(r) if i != j]  # non-diagonals
         assert all([c == 0 for c in nd])  # are all zeros
 
@@ -301,18 +301,19 @@ def get_minimum_presses(data):
         """Given this option for the free values figure out
         what the fixed values must be"""
         vals = []
-        for ri, r in enumerate(mtx):
+        for r in mtx:
             if all([x == 0 for x in r]):
                 break
-            # the adjustment is the contribution
-            # of this option
+
+            # the adjustment is the contribution of this option
             adj = 0
             for i, j in enumerate(free):
                 adj += r[j] * opt[i]
-            # the fixed value is the augmented column
-            # less the adjustment
+
+            # the fixed value is the augmented column less the adjustment
             x = r[-1] - adj
             vals.append(x)
+
         return vals
 
     _, _, btns, js = data
