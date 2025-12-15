@@ -98,19 +98,14 @@ def get_reduced_ref(btns, js):
     """Return a Reduced REF matrix of the linear system"""
     # Aim: use row reduction to arrive at a matrix where
     # the columns of non-free (pivot) variables are all 0s
-    # except for the pivot row. In other words if you removed
-    # the free variable columns you would have a zero matrix
-    # but with a diagonal of non-zeros.
+    # except for the pivot row which = 1.
+    # In other words if you removed the free variable columns and the augmented column
+    # you would have an identity matrix.
+    # This is known as putting the matrix into reduced Row Echelon Form (RREF)
     #
-    # From there you could take the final step to convert those
-    # non-zeros to 1's which puts it in reduced Row Echelon Form (RREF)
-    # but for our purposes we can divide by the pivot value later
-    # when calculating the fixed values for a specific instance
-    # of the free variables.
+    # So for the 1st example, the system looks like this.
     #
-    # So for the 1st example the system looks like this
-    #
-    # pressing button 5 E times + button 6 F times should give a joltage of 3
+    # Pressing button 5 E times + button 6 F times should give a joltage of 3
     # or in other words
     #
     # E+F   = 3 (these affect indicator 0)
@@ -131,7 +126,7 @@ def get_reduced_ref(btns, js):
     #   0 0 1 1 1 0 4
     #   1 1 0 1 0 0 7
     #
-    # using elimination we want to arrive at this
+    # and using Gaussian elimination we arrive at this
     # where variables 3 and 5 (marked v) are free
     #            v     v
     #   1  0  0  1  0 -1  2
@@ -141,20 +136,19 @@ def get_reduced_ref(btns, js):
     #
     # Ignoring the free variable and augmented columns would
     # leave us with a matrix where only the diagonal
-    # was non-zero (in this case the identity)
+    # was non-zero (the identity)
 
     # From here we can explore all the valid options
     # for the free variables and for each option we can
     # derive what the fixed values must be
     #
-    # fixed = (Aug - free) / pv
+    # fixed = (Aug - free)
     #
     # Aug:  value in the last column
     # free: sum(opt[i] x mtx[i]) where i is the ith free variable
-    # pv:   the value of the pivot (the diagonal)
     #
-    # When then just need to validate the fixed values
-    # for being positive integers and if so the option
+    # Then we just need to validate the fixed values
+    # for being positive integers and if so, the option
     # is valid for being a possible minimal solution.
 
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -174,9 +168,9 @@ def get_reduced_ref(btns, js):
         m[i][-1] = Fraction(jv, 1)
 
     # set 1s for when a button increases a joltage
-    for i, btn in enumerate(btns):
-        for j in btn:
-            m[j][i] = Fraction(1, 1)
+    for j, btn in enumerate(btns):
+        for i in btn:
+            m[i][j] = Fraction(1, 1)
 
     # because some columns might be free we need to track the
     # current row are pivoting on as this will not always be the same as
@@ -201,7 +195,8 @@ def get_reduced_ref(btns, js):
                 row_to_use = j + row_idx
                 break
 
-        # if there weren't any this is a free variable
+        # if there weren't any, it means this is a free variable
+        # make a note and try the next column
         if row_to_use is None:
             free.append(i)
             continue
@@ -211,18 +206,28 @@ def get_reduced_ref(btns, js):
         if row_idx != row_to_use:
             m[row_idx], m[row_to_use] = m[row_to_use], m[row_idx]
 
+        # make the pivot value = 1
+        row = m[row_idx]
+        divide_by = row[i]
+        for k, v in enumerate(row):
+            if k == i:
+                row[k] = 1
+            else:
+                row[k] = v / divide_by
+
         # now make this ith column = 0 for all the other rows
         for k, row in enumerate(m):
             # this is us, leave alone
             if k == row_idx:
                 continue
+
             # we might have to multiply our row
             # by some factor so that when we add it
             # to the other row the value in this ith column
             # becomes zero
-            orig_row_i = row[i]
-            for j, cell in enumerate(row):
-                row[j] = cell - m[row_idx][j] * orig_row_i / m[row_idx][i]
+            zeroing_factor = row[i]
+            for j, v in enumerate(row):
+                row[j] = v - m[row_idx][j] * zeroing_factor
 
             # the result of the above loop adjusts the whole row
             # keeping the equation balanced and in keeping with the
@@ -237,13 +242,13 @@ def get_reduced_ref(btns, js):
 
     # turn fractions into integers for readability
     for row in m:
-        for i, cell in enumerate(row):
-            if cell == int(cell):
-                row[i] = int(cell)
+        for i, v in enumerate(row):
+            if v == int(v):
+                row[i] = int(v)
 
     # pivot variables are the non-free variables
-    pivot_vars = [i for i in range(len(btns)) if i not in free]
-    return m, pivot_vars, free
+    pivot = [i for i in range(len(btns)) if i not in free]
+    return m, pivot, free
 
 
 def assess_free(data):
@@ -307,10 +312,6 @@ def get_minimum_presses(data):
             # the fixed value is the augmented column
             # less the adjustment
             x = r[-1] - adj
-            # divided by the pivot value
-            pivot_value = r[pv[ri]]
-            x = Fraction(x, pivot_value)
-
             vals.append(x)
         return vals
 
