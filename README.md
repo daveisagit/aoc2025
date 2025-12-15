@@ -6,7 +6,7 @@ Uses python 3.11, no other packages required
 
 ### -- Day 1: Secret Entrance ---
 
-Tw way dial, count passing zero. Tricky corner cases in part B for a day 1 puzzle.
+Two way dial, count passing zero. Tricky corner cases in part B for a day 1 puzzle.
 Zero to zero not in example and could easily put people in the horrible place of example passes, but my data fails
 
 ### --- Day 2: Gift Shop ---
@@ -32,7 +32,7 @@ Fiddly parsing problem, values written vertically, read from the right
 
 ### --- Day 7: Laboratories ---
 
-Process each row to know where beams are and how many splitters are hit
+Process each row to know where beams are and how many splitters are hit.
 Nice double recursion in part B using memoise
 
 ### --- Day 8: Playground ---
@@ -42,7 +42,7 @@ Union-find approach merge circuits as connections are added
 ### --- Day 9: Movie Theater ---
 
 Find the largest rectangle within the boundary.
-Since the corners would always be on the boundary there were no corner cases (ha ha)
+Since the corners would always be on the boundary there were no corner cases (ha ha).
 Just test for overlapping boundary excluding the limits
 
 ### --- Day 10: Factory ---
@@ -53,7 +53,7 @@ b) Reduce equations using row echelon form to form a narrower set of possibiliti
 
 ### --- Day 11: Reactor ---
 
-DAG: a) total paths b) Refine recursion to accumulate and with and without totals
+DAG: a) total paths b) Refine recursion to accumulate 2 total types (has those nodes / does not)
 
 ### --- Day 12: Christmas Tree Farm ---
 
